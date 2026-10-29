@@ -1,5 +1,7 @@
 # wskillw
 
+**中文名：地煞七十二变 skill** · [中文版 README](README.zh-CN.md)
+
 Personal archive of self-built skills, kept under Git for versioning, reuse, and
 migration across agent environments.
 
