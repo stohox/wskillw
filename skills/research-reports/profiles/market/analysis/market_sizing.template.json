@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "market_id": "{{manifest.report_id}}",
+    "market_definition": "{{manifest.market_definition}}",
+    "geography": "{{manifest.geography}}",
+    "currency": "{{manifest.currency}}",
+    "base_year": "{{manifest.base_year}}",
+    "price_basis": "{{manifest.price_basis}}",
+    "unit": "{{manifest.currency}} per year",
+    "taxonomy": "{{manifest.taxonomy}}",
+    "taxonomy_version": "{{manifest.taxonomy_version}}",
+    "denominator_id": "define-denominator",
+    "as_of_date": "{{manifest.retrieval_cutoff}}"
+  },
+  "top_down": {
+    "components": []
+  },
+  "bottom_up": {
+    "components": []
+  },
+  "scenarios": [],
+  "reconciliation_tolerance_percent": 20.0
+}

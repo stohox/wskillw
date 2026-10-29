@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "humanities",
+  "display_name": "人文研究",
+  "description": "文学、历史与思想史研究，强调语料与版本、一手文本定位、文本与阐释分离、引文可核。",
+  "manifest": {
+    "required": [
+      "report_id",
+      "title",
+      "subtitle",
+      "prepared_for",
+      "prepared_by",
+      "classification",
+      "research_question",
+      "scope_definition",
+      "corpus_summary",
+      "methodology",
+      "citation_style",
+      "corpus_period",
+      "retrieval_cutoff"
+    ],
+    "period_fields": [],
+    "forecast_after_history": false
+  },
+  "report_template": {
+    "en": "report_template.md",
+    "zh": "report_template.zh.md"
+  },
+  "structure": "structure.md",
+  "data_files": {
+    "source_ledger.csv": {
+      "base": "source_ledger",
+      "extra": ["work_id", "edition", "translator", "year", "archive_or_collection"]
+    },
+    "claims.csv": {
+      "base": "claims",
+      "extra": ["work_id", "locator", "quotation_status"]
+    },
+    "corpus.csv": {
+      "fields": [
+        "work_id",
+        "author",
+        "title",
+        "edition",
+        "translator",
+        "year",
+        "publisher",
+        "locator_scheme",
+        "language",
+        "source_id",
+        "notes"
+      ]
+    },
+    "quotations.csv": {
+      "fields": [
+        "quote_id",
+        "text",
+        "work_id",
+        "locator",
+        "translation_status",
+        "source_id",
+        "verified",
+        "notes"
+      ]
+    }
+  },
+  "analysis_files": {},
+  "validators": [
+    "python3 scripts/validate_evidence_ledger.py data/source_ledger.csv",
+    "python3 scripts/audit_claim_citations.py data/claims.csv data/source_ledger.csv",
+    "python3 profiles/humanities/scripts/validate_citations.py data/corpus.csv data/quotations.csv"
+  ],
+  "review_checklist": [
+    "Research question and scope are explicit before close reading.",
+    "Corpus and edition selection rules are stated; excluded works are named.",
+    "Every quotation records work_id, locator, translation status, and verification state.",
+    "Text, translation, paraphrase, and interpretation are kept distinct.",
+    "Scholarly consensus and contested readings are both represented.",
+    "Authorial intention is not asserted as textual fact.",
+    "Page/line locators follow a declared scheme and match the cited edition.",
+    "Every claim maps to source IDs; no quote is cited without verification.",
+    "Limitations and unresolved interpretive disputes remain visible."
+  ],
+  "review_checklist_zh": [
+    "细读前已明确研究问题与范围。",
+    "语料与版本选择规则已说明，排除的作品已列明。",
+    "每条引文均记录作品编号、定位、译本状态与核验状态。",
+    "文本、译文、转述与阐释保持区分。",
+    "学界共识与争议性读法均有呈现。",
+    "不得将作者意图表述为文本事实。",
+    "页码/行号定位遵循既定方案，并与所引版本一致。",
+    "每条主张映射到来源编号；未经核验的引文不得引用。",
+    "局限与未决的阐释争议保持可见。"
+  ]
+}

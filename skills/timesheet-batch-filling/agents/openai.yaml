@@ -1,0 +1,4 @@
+interface:
+  display_name: "Timesheet Batch Filling"
+  short_description: "Draft work logs from attendance and work evidence."
+  default_prompt: "Use $timesheet-batch-filling to draft my rolling monthly timesheet from WeCom attendance, Git history, and daily work reports."

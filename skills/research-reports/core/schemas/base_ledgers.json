@@ -1,0 +1,30 @@
+{
+  "source_ledger": [
+    "source_id",
+    "title",
+    "publisher",
+    "url",
+    "source_type",
+    "publication_date",
+    "retrieval_date",
+    "method",
+    "limitations",
+    "license_or_terms",
+    "archive_path"
+  ],
+  "claims": [
+    "claim_id",
+    "claim_text",
+    "claim_type",
+    "source_ids",
+    "calculation_id",
+    "assumption_ids",
+    "location",
+    "as_of_date",
+    "confidence",
+    "notes",
+    "evidence_quote",
+    "locator",
+    "support_status"
+  ]
+}

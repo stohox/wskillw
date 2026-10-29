@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "report_id": "vector-db-selection",
+  "title": "Vector Database Selection for RAG Service",
+  "subtitle": "Evidence-first technical comparison and benchmark review",
+  "prepared_for": "Platform Engineering",
+  "prepared_by": "Research Team",
+  "classification": "internal",
+  "scope_definition": "Self-hosted vector databases for a Python RAG service under 50M embeddings",
+  "systems_in_scope": ["Milvus", "Qdrant", "pgvector", "Weaviate"],
+  "evaluation_criteria": [
+    "query latency at 10M vectors",
+    "recall at fixed nprobe",
+    "operability and upgrade path",
+    "license compatibility",
+    "ecosystem and client maturity"
+  ],
+  "version_policy": "Pin to the latest stable release as of the verification date; record commit or image digest",
+  "verified_date": "2026-10-20",
+  "retrieval_cutoff": "2026-10-20"
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "technical",
+  "display_name": "技术研究",
+  "description": "技术选型、方案对比与基准评估，强调版本/提交固定、可复现基准与许可合规。",
+  "manifest": {
+    "required": [
+      "report_id",
+      "title",
+      "subtitle",
+      "prepared_for",
+      "prepared_by",
+      "classification",
+      "scope_definition",
+      "systems_in_scope",
+      "evaluation_criteria",
+      "version_policy",
+      "verified_date",
+      "retrieval_cutoff"
+    ],
+    "period_fields": [],
+    "forecast_after_history": false
+  },
+  "report_template": {
+    "en": "report_template.md",
+    "zh": "report_template.zh.md"
+  },
+  "structure": "structure.md",
+  "data_files": {
+    "source_ledger.csv": {
+      "base": "source_ledger",
+      "extra": [
+        "doc_or_artifact_type",
+        "software_version",
+        "commit_or_release",
+        "license",
+        "retrieved_from"
+      ]
+    },
+    "claims.csv": {
+      "base": "claims",
+      "extra": ["system", "version_scope", "evidence_type"]
+    },
+    "comparison_matrix.csv": {
+      "fields": [
+        "system_id",
+        "system_name",
+        "criterion",
+        "criterion_category",
+        "assessment",
+        "status",
+        "evidence_source_ids",
+        "as_of_date",
+        "notes"
+      ]
+    },
+    "benchmark_runs.csv": {
+      "fields": [
+        "run_id",
+        "system",
+        "version_or_commit",
+        "benchmark",
+        "metric",
+        "value",
+        "unit",
+        "environment",
+        "run_date",
+        "source_id",
+        "notes"
+      ]
+    }
+  },
+  "analysis_files": {
+    "benchmark_env.json": "analysis/benchmark_env.template.json"
+  },
+  "validators": [
+    "python3 scripts/validate_evidence_ledger.py data/source_ledger.csv",
+    "python3 scripts/audit_claim_citations.py data/claims.csv data/source_ledger.csv",
+    "python3 profiles/technical/scripts/validate_benchmark.py data/benchmark_runs.csv data/comparison_matrix.csv"
+  ],
+  "review_checklist": [
+    "Scope and evaluation criteria are explicit before comparing options.",
+    "Every claim maps to source IDs; primary docs, RFCs, source code, and reproducible benchmarks rank highest.",
+    "Every benchmark run pins version/commit, environment, metric, and unit.",
+    "Comparison matrix uses supports/partial/no/unknown and never infers 'no' from missing evidence.",
+    "Licenses, security advisories, and maintenance status are recorded with dates.",
+    "Findings, assumptions, benchmarks, opinions, and recommendations remain distinct.",
+    "Recommendations state decision thresholds and disconfirming evidence.",
+    "No vendor marketing is presented as independent evidence."
+  ],
+  "review_checklist_zh": [
+    "比较前已明确范围与评估标准。",
+    "每条主张映射到来源编号；一手文档、RFC、源码与可复现基准优先。",
+    "每次基准运行均固定版本/提交、环境、指标与单位。",
+    "对比矩阵使用 支持/部分支持/不支持/未知，且不把缺失证据推断为“不支持”。",
+    "许可证、安全公告与维护状态均注明日期。",
+    "发现、假设、基准、意见与建议保持区分。",
+    "建议说明决策阈值与反证。",
+    "不得将厂商营销材料作为独立证据。"
+  ]
+}

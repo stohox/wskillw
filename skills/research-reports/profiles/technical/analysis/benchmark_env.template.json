@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "environment_id": "define-environment",
+  "hardware": "describe CPU / RAM / accelerator",
+  "os": "describe OS and kernel version",
+  "runtime_versions": {},
+  "dataset_or_workload": "describe the workload or dataset",
+  "repetitions": 0,
+  "measurement_method": "describe timing and measurement method",
+  "as_of_date": "{{manifest.verified_date}}",
+  "source_ids": []
+}

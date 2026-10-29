@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "default_mode": "standard",
+  "modes": {
+    "brief": {
+      "label": "简报",
+      "min_pages": 8,
+      "min_chapters": 4,
+      "min_figures": 1,
+      "min_tables": 1,
+      "min_chars_zh": 3000,
+      "min_words_en": 2500,
+      "chars_per_page": 600
+    },
+    "standard": {
+      "label": "标准报告",
+      "min_pages": 20,
+      "min_chapters": 6,
+      "min_figures": 3,
+      "min_tables": 3,
+      "min_chars_zh": 8000,
+      "min_words_en": 7000,
+      "chars_per_page": 600
+    },
+    "deep": {
+      "label": "深度长报告",
+      "min_pages": 45,
+      "min_chapters": 9,
+      "min_figures": 6,
+      "min_tables": 6,
+      "min_chars_zh": 20000,
+      "min_words_en": 18000,
+      "chars_per_page": 600
+    }
+  }
+}

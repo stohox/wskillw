@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "report_id": "motif-of-the-sea-in-modern-poetry",
+  "title": "The Sea Motif in Early Twentieth-Century Chinese Poetry",
+  "subtitle": "A comparative study of corpus, edition, and interpretation",
+  "prepared_for": "Comparative Literature Seminar",
+  "prepared_by": "Research Team",
+  "classification": "internal",
+  "research_question": "How does the sea motif shift from symbol of exile to symbol of modernity between 1910 and 1935?",
+  "scope_definition": "Chinese-language poetry published 1910-1935, excluding translated foreign verse",
+  "corpus_summary": "Twelve poets across three anthologies, using the 1985 scholarly edition as control text",
+  "methodology": "Close reading with comparative analysis; locators by page and line of the control edition",
+  "citation_style": "Chicago",
+  "corpus_period": "1910-1935",
+  "retrieval_cutoff": "2026-10-20"
+}

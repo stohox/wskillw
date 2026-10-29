@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "series_id": "define-series",
+    "description": "Replace with the forecast measure",
+    "geography": "{{manifest.geography}}",
+    "currency": "{{manifest.currency}}",
+    "base_year": "{{manifest.base_year}}",
+    "price_basis": "{{manifest.price_basis}}",
+    "unit": "{{manifest.currency}} per year",
+    "measure_type": "flow",
+    "as_of_date": "{{manifest.retrieval_cutoff}}",
+    "source_ids": []
+  },
+  "start_year": "{{derived.historical_end}}",
+  "start_value": 0,
+  "horizon_years": "{{derived.forecast_horizon}}",
+  "scenarios": [],
+  "sensitivity": {
+    "base_scenario_id": "base",
+    "growth_rate_shifts": [-0.02, 0.0, 0.02]
+  }
+}

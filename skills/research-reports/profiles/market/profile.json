@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "market",
+  "display_name": "市场研究",
+  "description": "市场规模、竞争格局、需求证据与情景预测，强调 TAM/SAM/SOM 可追溯与可审计。",
+  "manifest": {
+    "required": [
+      "report_id",
+      "title",
+      "subtitle",
+      "prepared_for",
+      "prepared_by",
+      "classification",
+      "market_definition",
+      "inclusions",
+      "exclusions",
+      "geography",
+      "currency",
+      "base_year",
+      "price_basis",
+      "taxonomy",
+      "taxonomy_version",
+      "historical_period",
+      "forecast_period",
+      "retrieval_cutoff"
+    ],
+    "period_fields": ["historical_period", "forecast_period"],
+    "forecast_after_history": true,
+    "max_forecast_horizon": 50
+  },
+  "report_template": {
+    "en": "report_template.md",
+    "zh": "report_template.zh.md"
+  },
+  "structure": "references/report_structure_guide.md",
+  "data_files": {
+    "source_ledger.csv": {
+      "base": "source_ledger",
+      "extra": [
+        "geography",
+        "currency",
+        "base_year",
+        "price_basis",
+        "measure_type",
+        "unit",
+        "taxonomy",
+        "taxonomy_version",
+        "revision_status",
+        "sample"
+      ]
+    },
+    "claims.csv": {
+      "base": "claims",
+      "extra": [
+        "geography",
+        "currency",
+        "base_year",
+        "price_basis",
+        "measure_type",
+        "unit",
+        "taxonomy",
+        "taxonomy_version",
+        "revision_status"
+      ]
+    },
+    "competitor_feature_matrix.csv": {
+      "fields": [
+        "competitor_id",
+        "competitor_name",
+        "feature_id",
+        "feature_name",
+        "status",
+        "evidence_source_ids",
+        "as_of_date",
+        "geography",
+        "product_scope",
+        "notes"
+      ]
+    },
+    "consistency_input.csv": {
+      "fields": [
+        "record_id",
+        "comparison_group",
+        "value",
+        "unit",
+        "currency",
+        "base_year",
+        "price_basis",
+        "measure_type",
+        "geography",
+        "period",
+        "taxonomy",
+        "taxonomy_version",
+        "denominator_id",
+        "source_id"
+      ]
+    },
+    "assumptions.csv": {
+      "fields": [
+        "assumption_id",
+        "description",
+        "downside_value",
+        "base_value",
+        "upside_value",
+        "unit",
+        "source_ids",
+        "rationale"
+      ]
+    }
+  },
+  "analysis_files": {
+    "market_sizing.json": "analysis/market_sizing.template.json",
+    "forecast_sensitivity.json": "analysis/forecast_sensitivity.template.json"
+  },
+  "validators": [
+    "python3 scripts/validate_evidence_ledger.py data/source_ledger.csv",
+    "python3 scripts/audit_claim_citations.py data/claims.csv data/source_ledger.csv",
+    "python3 scripts/validate_competitor_matrix.py data/competitor_feature_matrix.csv --source-ledger data/source_ledger.csv",
+    "python3 scripts/check_unit_consistency.py data/consistency_input.csv"
+  ],
+  "review_checklist": [
+    "Scope, inclusions, exclusions, geography, period, taxonomy, and denominator are explicit.",
+    "Every factual or quantitative claim maps to source IDs.",
+    "Publication and retrieval dates, revisions, units, currencies, and base years are recorded.",
+    "Top-down and bottom-up sizing use compatible definitions and disjoint coverage keys.",
+    "TAM/SAM/SOM are presented as conditional scenarios with sensitivity.",
+    "Forecast ranges are labeled as scenarios, not confidence intervals.",
+    "Survey sample, frame, mode, field dates, weighting, response, and limitations are disclosed.",
+    "Competitor claims use public, lawful evidence and identify unknowns.",
+    "No PII, trade secrets, deceptive collection, or unsupported paid-market figures appear.",
+    "Findings, assumptions, calculations, forecasts, opinions, and recommendations remain distinct.",
+    "The report states that it is not investment, legal, or financial advice."
+  ],
+  "review_checklist_zh": [
+    "范围、纳入/排除、地理、期间、分类与分母均已明确。",
+    "每条事实性或量化主张均映射到来源编号。",
+    "出版/检索日期、修订、单位、币种与基年均已记录。",
+    "自上而下与自下而上的规模测算口径一致、覆盖互斥。",
+    "TAM/SAM/SOM 以条件情景与敏感性呈现。",
+    "预测区间标注为情景，而非置信区间。",
+    "调研的样本、抽样框、方式、时间、加权、应答率与局限均已披露。",
+    "竞品证据公开合法，并标注未知项。",
+    "不含个人信息、商业秘密、欺骗性采集或无依据的付费市场数字。",
+    "发现、假设、计算、预测、意见与建议保持区分。",
+    "报告声明不构成投资、法律或财务建议。"
+  ]
+}
