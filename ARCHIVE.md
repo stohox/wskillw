@@ -2,7 +2,8 @@
 
 - Archived at: 2026-10-29
 - Repository: https://github.com/stohox/wskillw
-- Total: 176 files, approximately 3.2 MB
+- Archived content: 176 files, approximately 3.2 MB
+- Repository total: 179 files (including `README.md`, `ARCHIVE.md`, and `.gitignore`)
 
 | Skill | Source path | Destination | Files | Size | Notes |
 |-------|-------------|-------------|-------|------|-------|
