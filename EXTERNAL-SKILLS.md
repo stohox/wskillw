@@ -1,0 +1,182 @@
+# 外部 Skill 精选
+
+> 收录经过筛选的外部 Skill / Plugin / 工具，记录用途、适用场景、安装方式与使用边界。
+> 最后核对：2026-10-29。
+>
+> 收录标准：能明显提升 Agent 工作流；有可读文档；许可证清晰；不要求提交敏感数据。
+> 说明：本仓库只记录链接与使用笔记，不复制第三方代码；安装前请阅读上游 README 与 LICENSE。
+
+## 索引
+
+| 名称 | 形态 | 一句话 | 链接 |
+|------|------|--------|------|
+| **Archify** | Agent Skill + CLI | 把想法、方案或代码库变成可交互的单文件 HTML 图表 | https://github.com/tt-a1i/archify |
+| **Understand Anything** | Claude Code Plugin / 多平台 Skill 集 | 把代码库或知识库变成可探索、可提问的知识图谱 | https://github.com/Egonex-AI/Understand-Anything |
+
+---
+
+## 1. Archify
+
+**仓库**：https://github.com/tt-a1i/archify  
+**官网**：https://archify.si  
+**形态**：Agent Skill + 零依赖 CLI（Node.js ≥ 18）  
+**许可证**：Apache-2.0（历史版本为 MIT）  
+**热度参考**：GitHub 约 91k stars（2026-10-29；热度不等于适配度）
+
+### 它解决什么问题
+
+Archify 把"技术意图"变成"可沟通的视觉产物"：用户用自然语言描述系统、方案或代码库，Agent 生成一个**自包含、可交互的 HTML 图表**，可以继续在对话中精修（"加一个 Redis"、"把回滚路径高亮"），也可以导出 PNG/PDF 分享。
+
+它不是通用绘图编辑器，也不是 Mermaid 主题；它的差异在于：
+
+- **类型化 JSON IR**：每种图表都有 schema，源文件可复现；
+- **原子化验证**：schema、布局、HTML/SVG、路由、标签避让全部通过才替换"上一已知良好"文件；
+- **源码证据可选**：节点可标记 `SRC n`，打开 Git 验证过的文件与行范围；
+- **单文件可移植**：输出是一个 HTML，离线可开，发给别人仍可交互。
+
+### 适用场景
+
+1. **架构/方案评审**：让 Agent 读取代码库，生成 8–12 个核心组件、主路径、外部依赖与信任边界的运行时架构图。
+2. **PR / 设计文档沟通**：把变更方案画成 Workflow、Sequence 或 Data Flow，减少"文字说不清"的评审往返。
+3. **事故复盘**：用 Timeline + Sequence + Waterfall 还原事件顺序、调用链与耗时分解。
+4. **数据与领域建模**：ERD、Class、Tree 展示表结构、接口继承、模块分解。
+5. **一页式解释（Explainer）**：让 Agent 以"结论先行 + 每问题一栏"的形式输出解释页，含表格、步骤、代码与编号来源。
+6. **对外分享**：单文件 HTML、PNG/WebP/JPG 长图、PDF 打印、1200×630 分享卡。
+
+### 不适用场景
+
+- 数值图表、仪表盘、BI 报表；
+- 通用 WYSIWYG 绘图编辑器；
+- 自动解析 Mermaid（README 明确不在范围内）；
+- 托管分享服务（输出是本地单文件，不提供云托管）。
+
+### 安装与调用
+
+```bash
+# 安装为全局 Agent Skill
+npx skills add tt-a1i/archify -g
+
+# 试用但不安装（以 Codex 为例）
+npx skills use tt-a1i/archify@archify --agent codex
+```
+
+常见安装位置：Claude Code `~/.claude/skills/` 或 `.claude/skills/`；Codex `~/.agents/skills/` 或 `.agents/skills/`；opencode `~/.config/opencode/skills/` 等。
+
+调用示例：
+
+```text
+Use Archify to draw: Browser -> API -> Redis cache -> PostgreSQL fallback.
+Analyze this repository, then use archify to create a high-level runtime
+architecture diagram. Show 8–12 core components, one primary path,
+external dependencies, and trust boundaries.
+```
+
+### 使用建议
+
+- 先让 Agent 画"主路径 + 边界"，细节放卡片，不要一开始堆几十条边；
+- 每次只改一个结构（加节点、换布局、改主题），便于验证与回滚；
+- 对外的图先导出 PDF/PNG，HTML 作为可交互附件；
+- 架构图要标"证据来源/commit"，否则容易变成"看起来对"的示意图。
+
+### 边界与风险
+
+- 需要 Node.js ≥ 18；查看生成的 HTML 只需浏览器，不需要安装 Archify；
+- 外部链接/地图跳转需要网络；更新检查可用 `ARCHIFY_UPDATE_CHECK_DISABLED=1` 关闭；
+- 图表是"沟通产物"，不是运行时真相；关键结论仍要回到代码/监控验证。
+
+---
+
+## 2. Understand Anything
+
+**仓库**：https://github.com/Egonex-AI/Understand-Anything  
+**官网**：https://understand-anything.com/  
+**形态**：Claude Code Plugin / 多平台 Skill 集（Codex、Cursor、Copilot、Gemini CLI、OpenCode、Kimi CLI 等）  
+**许可证**：MIT  
+**热度参考**：GitHub 约 89k stars（2026-10-29；热度不等于适配度）
+
+### 它解决什么问题
+
+Understand Anything 用多 Agent 流水线分析项目，构建**文件、函数、类、依赖关系的知识图谱**，再提供一个可交互的仪表盘，让你"先看全局，再读代码"。它也支持把知识库/文档（Karpathy-pattern wiki）转成带社区聚类的知识图谱。
+
+它解决的是"接手陌生代码库/知识库时，从哪里开始"的问题，而不是替代 IDE 的跳转或精确调用图。
+
+### 适用场景
+
+1. **新代码库 onboarding**：面对 20 万行代码，先看知识图谱与核心模块，再有针对性地读文件。
+2. **架构与依赖梳理**：看模块/文件/类的依赖关系，定位"改这里会影响哪里"。
+3. **代码评审前快速理解**：在 Review 之前，先建立变更相关模块的全局图。
+4. **知识库/文档理解**：把 wiki/文档转成实体、关系、主张的知识图谱，适合研究与写作前的资料梳理。
+5. **团队分享**：把生成的 `.ua/` 数据目录提交到仓库，同事无需 LLM/API key，用 viewer 只读查看。
+
+### 不适用场景
+
+- 只想查一个符号/一个文件：用 grep、LSP 或 IDE 跳转更快；
+- 需要精确调用图、性能剖析、运行时追踪：知识图谱不是 profiler；
+- 不能把代码/文档交给 LLM 的隐私或合规场景；
+- 需要实时 IDE 级补全/跳转：它是分析型工具，不是编辑器。
+
+### 安装与调用
+
+Claude Code（原生插件）：
+
+```text
+/plugin marketplace add Egonex-AI/Understand-Anything
+/plugin install understand-anything
+```
+
+其他平台（以 Codex 为例）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Egonex-AI/Understand-Anything/main/install.sh | bash -s codex
+```
+
+Windows PowerShell：
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/Egonex-AI/Understand-Anything/main/install.ps1 | iex
+```
+
+调用方式因平台而异：多数平台用 `/understand`，**Codex 用 `$understand`**；知识库分析用 `/understand-knowledge`。如果前缀不被识别，直接用自然语言："Use the understand skill to analyze this project."
+
+只看图、不跑 LLM（Node.js ≥ 18）：
+
+```bash
+npx https://github.com/Egonex-AI/Understand-Anything/releases/latest/download/understand-anything-viewer.tgz /path/to/analyzed/project
+```
+
+### 使用建议
+
+- 第一次分析先限定范围（核心服务/关键目录），不要一上来全仓库；
+- 图谱用于"建立假设"，关键结论回到源码验证；
+- 把 `.ua/`（或旧版 `.understand-anything/`）提交到仓库，方便团队共享；
+- 在隐私敏感项目里，先确认模型提供方与数据流向，或改用本地模型。
+
+### 边界与风险
+
+- 多 Agent 分析会消耗较多 token/时间，仓库越大越明显；
+- 图谱质量取决于代码结构、注释与语言支持；动态语言/生成代码可能噪声较大；
+- 安装脚本会克隆仓库并创建符号链接，运行前先阅读 `install.sh` / `install.ps1`；
+- 平台/命令更新较快，以仓库 README 为准。
+
+---
+
+## 选型建议
+
+| 目标 | 优先选择 | 原因 |
+|------|----------|------|
+| 把方案/架构"画出来"给人看 | Archify | 输出可交互 HTML，适合评审与分享 |
+| 读懂陌生代码库/知识库 | Understand Anything | 知识图谱 + 仪表盘，先看全局 |
+| 事故复盘 | Archify | Timeline/Sequence/Waterfall 组合 |
+| 代码评审前建立全局图 | Understand Anything | 依赖/影响面探索 |
+| 一页式解释/教学材料 | Archify（Explainer） | 结论先行 + 图表 + 来源 |
+| 单符号/单文件查找 | grep / LSP / IDE | 两个工具都太重 |
+
+**组合用法**：先用 Understand Anything 建立代码库图谱、定位核心模块；再用 Archify 把关键链路画成架构图/时序图，用于评审或分享。
+
+## 维护约定
+
+- 每个条目至少记录：名称、仓库链接、形态、用途、适用场景、不适用场景、安装方式、许可证、最后核对日期。
+- 只记录链接与使用笔记，不复制第三方代码；不镜像第三方仓库。
+- 新增前先核对：许可证、最近更新时间、是否仍在维护、是否要求上传代码/数据。
+- 热度（stars）只作参考，不作为推荐依据。
+- 安装第三方 Skill/Plugin 前，先阅读安装脚本与权限要求；生产环境建议锁定版本。

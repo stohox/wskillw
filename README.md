@@ -16,6 +16,7 @@ wskillw/
 ├── collections/
 │   └── nvwa-examples/             # distilled persona/thinking-style skills (14 personas)
 ├── ARCHIVE.md                     # provenance and archive manifest
+├── EXTERNAL-SKILLS.md             # curated external skills with use cases
 └── README.md
 ```
 
@@ -27,6 +28,12 @@ wskillw/
 | `web-ui-capture` | Capture observable website states and produce an offline interactive HTML prototype with mock data | `C:\Users\guoxi\.codex\skills\web-ui-capture` |
 | `timesheet-batch-filling` | Draft and safely submit work logs from WeCom attendance, Git history, and daily reports | `C:\Users\guoxi\.codex\skills\timesheet-batch-filling` (redacted copy) |
 | `nvwa-examples` | Distilled thinking-style skills for 14 public figures/operators | `C:\Users\guoxi\AppData\Roaming\devin\skills\nuwa-skill\examples` |
+
+## External skills
+
+Curated external skills worth using, with links, use cases, and caveats:
+[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md). Currently covers **Archify** and
+**Understand Anything**.
 
 ## Install
 

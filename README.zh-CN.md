@@ -15,6 +15,7 @@ wskillw/
 ├── collections/
 │   └── nvwa-examples/             # 14 个公众人物/操盘手的思维框架蒸馏
 ├── ARCHIVE.md                     # 归档来源与清单
+├── EXTERNAL-SKILLS.md             # 外部 Skill 精选
 └── README.md / README.zh-CN.md
 ```
 
@@ -26,6 +27,12 @@ wskillw/
 | `web-ui-capture` | 捕获可观察的网页状态与截图，生成带模拟数据的离线可交互 HTML 原型 | `C:\Users\guoxi\.codex\skills\web-ui-capture` |
 | `timesheet-batch-filling` | 从企业微信考勤、Git 提交与日报生成工时草案，并在明确授权后安全提交 | `C:\Users\guoxi\.codex\skills\timesheet-batch-filling`（脱敏副本） |
 | `nvwa-examples` | 14 个公众人物/操盘手的思维框架、决策启发式与表达 DNA 蒸馏成果 | `C:\Users\guoxi\AppData\Roaming\devin\skills\nuwa-skill\examples` |
+
+## 外部 Skill 精选
+
+收录经过筛选的外部 Skill / Plugin，附链接、使用场景与边界：
+[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md)。目前收录 **Archify** 与
+**Understand Anything**。
 
 ## 安装
 
