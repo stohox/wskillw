@@ -32,8 +32,8 @@ wskillw/
 ## External skills
 
 Curated external skills worth using, with links, use cases, and caveats:
-[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md). Currently covers **Archify** and
-**Understand Anything**.
+[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md). Currently covers **Archify**,
+**Understand Anything**, **OpenSpec**, and **Brainstorm**.
 
 ## Install
 

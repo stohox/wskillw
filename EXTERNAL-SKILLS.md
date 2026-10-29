@@ -12,6 +12,8 @@
 |------|------|--------|------|
 | **Archify** | Agent Skill + CLI | 把想法、方案或代码库变成可交互的单文件 HTML 图表 | https://github.com/tt-a1i/archify |
 | **Understand Anything** | Claude Code Plugin / 多平台 Skill 集 | 把代码库或知识库变成可探索、可提问的知识图谱 | https://github.com/Egonex-AI/Understand-Anything |
+| **OpenSpec** | CLI + 规格驱动工作流 | 先写规格再写代码：proposal / specs / design / tasks / archive | https://github.com/Fission-AI/OpenSpec |
+| **Brainstorm（Superpowers）** | Agent Skill | 动手前用提问把“真正想要什么”问清楚，并产出设计文档 | https://github.com/obra/superpowers/tree/main/skills/brainstorming |
 
 ---
 
@@ -160,18 +162,170 @@ npx https://github.com/Egonex-AI/Understand-Anything/releases/latest/download/un
 
 ---
 
+## 3. OpenSpec
+
+**仓库**：https://github.com/Fission-AI/OpenSpec  
+**文档**：https://openspec.dev/docs  
+**形态**：CLI + 规格驱动开发（SDD）工作流，面向 30+ AI 编程助手（不是单一 `SKILL.md`）  
+**许可证**：MIT  
+**热度参考**：GitHub 约 73k stars（2026-10-29；热度不等于适配度）
+
+### 它解决什么问题
+
+AI 编程助手很强，但当需求只存在于聊天记录里，结果就不可预测。OpenSpec 在"写代码"之前加一层轻量规格：人和 AI 先对齐"要做什么"，再把变更拆成 proposal / specs / design / tasks，完成后归档。
+
+核心产物：
+
+- `proposal.md`：为什么做、改什么；
+- `specs/`：需求与场景（普通 Markdown，无特殊语法）；
+- `design.md`：技术方案；
+- `tasks.md`：实现清单；
+- `openspec/changes/archive/`：已完成的变更归档。
+
+### 适用场景
+
+1. **新功能/大改动前**：需要先对齐需求、验收场景与技术方案，再让 AI 写代码。
+2. **Brownfield 项目**：在现有代码上做变更，需要明确"改哪里、为什么、影响什么"。
+3. **团队/跨仓库规格**：Stores（beta）把 `openspec/` 放到独立仓库，多个代码仓共享同一份规格。
+4. **需要可审计的变更记录**：每个 change 都有 proposal/spec/design/tasks，完成后归档。
+5. **多工具协作**：Claude Code、Codex、Cursor、Copilot 等 30+ 工具使用同一套规格。
+
+### 不适用场景
+
+- 一行修复、快速调试、紧急故障：直接改更快；
+- 团队需要重量级阶段门与大量文档：Spec Kit 等更合适；
+- 不愿意维护 Markdown 规格：OpenSpec 的价值来自规格本身。
+
+### 安装与调用
+
+macOS / Linux（单文件，无需 Node）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Fission-AI/OpenSpec/main/scripts/binary/install.sh | sh
+```
+
+Windows PowerShell：
+
+```powershell
+irm https://raw.githubusercontent.com/Fission-AI/OpenSpec/main/scripts/binary/install.ps1 | iex
+```
+
+npm（Node.js ≥ 20.19）或 Homebrew：
+
+```bash
+npm install -g @fission-ai/openspec@latest
+brew install openspec
+```
+
+初始化：
+
+```bash
+cd your-project
+openspec init
+```
+
+默认 profile 的常用命令：
+
+- `/opsx:explore`：还没想清楚时，先探索；
+- `/opsx:propose <change>`：创建变更（proposal / specs / design / tasks）；
+- `/opsx:apply`：按 tasks 实现；
+- `/opsx:archive`：归档并更新 specs。
+
+不同工具前缀不同：Cursor / Copilot 可能是 `/opsx-propose`，Codex 可能是 `$openspec-propose`；`openspec init` 会打印正确形式。
+
+### 使用建议
+
+- 一个 change 只做一件事；跨仓库用 Stores，不要把多个仓库的变更塞进一个 proposal。
+- 先写"可验证的场景"（WHEN/THEN），再写技术方案；场景就是验收标准。
+- 实现前清空上下文，按 tasks 逐项推进；完成后 archive，保持 specs 与代码同步。
+- 高推理模型更适合规划；实现阶段可用更便宜的模型。
+
+### 边界与风险
+
+- 默认收集匿名命令名/版本遥测；`openspec config set telemetry.enabled false` 或 `OPENSPEC_TELEMETRY=0` 可关闭。
+- Stores 仍是 beta；跨仓库方案先小范围验证。
+- 规格是"意图"，不是运行时真相；关键行为仍要测试/监控验证。
+
+---
+
+## 4. Brainstorm（Superpowers `brainstorming` skill）
+
+**仓库**：https://github.com/obra/superpowers  
+**Skill 路径**：https://github.com/obra/superpowers/tree/main/skills/brainstorming  
+**形态**：Superpowers 框架内的 Agent Skill（自动触发，不是独立仓库）  
+**许可证**：MIT（父仓库）  
+**热度参考**：父仓库约 307k stars（2026-10-29；热度不等于适配度）
+
+> 说明：这里指 `obra/superpowers` 的 `brainstorming` skill；不是同名的独立仓库或低星分支。
+
+### 它解决什么问题
+
+在"动手做"之前，先把"真正想要什么、为什么"问清楚。它通过提问让用户描述意图，复述理解、让用户纠正，列出 2–3 个实现路径与取舍，最后写设计文档；**设计文档获批前，不允许写产品代码**（HARD-GATE）。
+
+### 适用场景
+
+1. **新功能/新产品**：需求还模糊，需要先对齐 what/why。
+2. **非软件创意**：演讲、业务、装修等"要先想清楚再动手"的事。
+3. **设计文档**：需要一份能让别的工程师直接排期的 design doc。
+4. **避免"AI 猜错意图就开写"**：强制在实现前确认设计。
+5. **与 Superpowers 串联**：brainstorm → design → writing-plans → TDD 实现。
+
+### 不适用场景
+
+- 需求已经完全明确的小改动（例如"把图标改成矢车菊蓝"）；
+- 紧急故障/线上事故：先止血，再复盘；
+- 只想让 AI 直接改代码、不想参与设计讨论。
+
+### 安装与调用
+
+Superpowers 按平台安装，常见方式：
+
+- **Claude Code**：`/plugin install superpowers@claude-plugins-official`；或 `/plugin marketplace add obra/superpowers-marketplace` 后 `/plugin install superpowers@superpowers-marketplace`
+- **Codex**：在 Plugins 市场搜索 `superpowers` 安装
+- **Cursor**：`/add-plugin superpowers`
+- **其他平台**：见父仓库 README 的 Installation 段
+
+安装后，`brainstorming` 会在"开始构建"前自动触发；也可以显式说"用 brainstorming 帮我梳理这个想法"。它位于 `skills/brainstorming/SKILL.md`。
+
+### 工作流要点
+
+1. 先读现有项目/上下文，不问已知信息；
+2. 第一条消息复述请求、指出关键约束/冲突，只问一个最影响结果的问题；
+3. 对话中每次只问一个问题，逐步回放理解；
+4. 给出 2–3 个实现路径与取舍，推荐一个；
+5. 写设计文档（小改动短版，项目完整版），项目版可让 fresh subagent 做 builder check；
+6. 设计获批后才进入 writing-plans / 实现（HARD-GATE）。
+
+### 边界与风险
+
+- 对小任务可能显得"流程重"；如果用户明确说"直接做"，它会退场。
+- 自动触发依赖 Superpowers 的 bootstrap；某些平台/长会话压缩后可能失效，重开会话或显式调用。
+- 可选 visual companion 会从官网加载 logo（含版本号）；`SUPERPOWERS_DISABLE_TELEMETRY` 可关闭。
+
+---
+
 ## 选型建议
 
 | 目标 | 优先选择 | 原因 |
 |------|----------|------|
-| 把方案/架构"画出来"给人看 | Archify | 输出可交互 HTML，适合评审与分享 |
-| 读懂陌生代码库/知识库 | Understand Anything | 知识图谱 + 仪表盘，先看全局 |
+| 需求模糊，先想清楚要做什么 | Brainstorm | 提问/回放/设计文档，锁定 what & why |
+| 需求已清楚，要规格与变更管理 | OpenSpec | proposal/spec/design/tasks + archive |
+| 接手陌生代码库/知识库 | Understand Anything | 知识图谱先看全局 |
+| 把方案/架构"画出来"给人看 | Archify | 可交互 HTML，适合评审与分享 |
 | 事故复盘 | Archify | Timeline/Sequence/Waterfall 组合 |
 | 代码评审前建立全局图 | Understand Anything | 依赖/影响面探索 |
 | 一页式解释/教学材料 | Archify（Explainer） | 结论先行 + 图表 + 来源 |
-| 单符号/单文件查找 | grep / LSP / IDE | 两个工具都太重 |
+| 单符号/单文件查找 | grep / LSP / IDE | 这些工具都太重 |
 
-**组合用法**：先用 Understand Anything 建立代码库图谱、定位核心模块；再用 Archify 把关键链路画成架构图/时序图，用于评审或分享。
+**推荐链路（不是强绑定）**：
+
+1. **Understand Anything**：先摸清现有代码/知识库，建立全局图；
+2. **Brainstorm**：把 what/why 问清楚，产出设计文档；
+3. **OpenSpec**：把设计拆成 proposal / specs / design / tasks；
+4. **Archify**：把关键架构/流程画出来，用于评审或分享；
+5. **实现**：进入编码；Superpowers 可继续接 writing-plans / TDD，OpenSpec 用 `/opsx:apply` 按 tasks 推进。
+
+这套链路覆盖"理解现状 → 想清楚 → 写规格 → 画出来 → 实现"，四个工具各管一段，不互相替代。
 
 ## 维护约定
 

@@ -31,8 +31,8 @@ wskillw/
 ## 外部 Skill 精选
 
 收录经过筛选的外部 Skill / Plugin，附链接、使用场景与边界：
-[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md)。目前收录 **Archify** 与
-**Understand Anything**。
+[EXTERNAL-SKILLS.md](EXTERNAL-SKILLS.md)。目前收录 **Archify**、
+**Understand Anything**、**OpenSpec** 与 **Brainstorm**。
 
 ## 安装
 
