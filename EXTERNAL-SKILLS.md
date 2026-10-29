@@ -14,6 +14,7 @@
 | **Understand Anything** | Claude Code Plugin / 多平台 Skill 集 | 把代码库或知识库变成可探索、可提问的知识图谱 | https://github.com/Egonex-AI/Understand-Anything |
 | **OpenSpec** | CLI + 规格驱动工作流 | 先写规格再写代码：proposal / specs / design / tasks / archive | https://github.com/Fission-AI/OpenSpec |
 | **Brainstorm（Superpowers）** | Agent Skill | 动手前用提问把“真正想要什么”问清楚，并产出设计文档 | https://github.com/obra/superpowers/tree/main/skills/brainstorming |
+| **Context7** | MCP Server + CLI/Skill | 把与版本相关的库文档注入 Agent，减少过时 API 与幻觉 | https://github.com/upstash/context7 |
 
 ---
 
@@ -304,12 +305,90 @@ Superpowers 按平台安装，常见方式：
 
 ---
 
+## 5. Context7
+
+**仓库**：https://github.com/upstash/context7  
+**官网**：https://context7.com  
+**形态**：MCP Server + CLI/Skill（两种模式：MCP 原生调用 / CLI + Skills）  
+**许可证**：MIT  
+**热度参考**：GitHub 约 64k stars（2026-10-29；热度不等于适配度）
+
+### 它解决什么问题
+
+LLM 的训练数据会过时，容易生成旧版 API、已废弃参数或不存在的接口。Context7 把"与版本相关的库文档和代码示例"注入 Agent 上下文，让生成的代码对齐当前版本文档。
+
+两种模式：
+
+- **CLI + Skills**：`ctx7` 安装一个 skill，Agent 用 CLI 拉文档，不需要 MCP；
+- **MCP**：注册 Context7 MCP Server，Agent 直接调用 `resolve-library-id` / `query-docs`。
+
+### 适用场景
+
+1. **用新版本框架/库写代码**（Next.js、Supabase、Cloudflare Workers 等），需要当前 API。
+2. **版本迁移**：明确"Next.js 16"、"某库 v5"等版本，拉对应文档。
+3. **不熟悉的库**：先让 Agent 查文档，再写代码。
+4. **减少"看起来对但 API 不存在"的幻觉**。
+5. **固定为工作流规则**：在 Cursor Rules / CLAUDE.md 里要求"库/API 问题先用 Context7"。
+
+### 不适用场景
+
+- 通用网络搜索、新闻、价格等非库文档问题；
+- 内部私有库/未被 Context7 收录的文档；
+- 离线/气隙环境（MCP 需要访问 `context7.com`）；
+- 模型已知且版本不敏感的简单 API。
+
+### 安装与调用
+
+一键设置（`ctx7` CLI 需要 Node.js ≥ 22.13）：
+
+```bash
+npx ctx7 setup
+```
+
+OAuth 登录、生成 API key，并选择 CLI + Skills 或 MCP 模式；可用 `--cursor`、`--claude`、`--opencode` 指定客户端。
+
+手动配置 MCP：
+
+- Server URL：`https://mcp.context7.com/mcp`
+- Header：`Authorization: Bearer YOUR_API_KEY`
+- 客户端配置：https://context7.com/docs/resources/all-clients
+
+CLI 命令：
+
+```bash
+ctx7 library <name> <query>
+ctx7 docs <libraryId> <query>
+```
+
+MCP 工具：
+
+- `resolve-library-id`：库名 → Context7 library ID；
+- `query-docs`：按 library ID + 问题拉取文档。
+
+### 使用建议
+
+- 在 prompt 里加 `use context7`；
+- 已知库时直接给 ID：`use library /supabase/supabase for API and docs`；
+- 需要特定版本时写清版本：`How do I set up a Next.js 16 proxy? use context7`；
+- 在 Cursor Rules / CLAUDE.md 里加规则："Always use Context7 when I need library/API documentation..."；
+- 关键 API 仍要回官方文档核对；Context7 是加速器，不是最终权威。
+
+### 边界与风险
+
+- 文档由社区贡献，准确/完整/安全不保证；关键行为以官方文档与测试为准。
+- 建议申请免费 API key（更高限额）；请求会发往 `context7.com`。
+- 仓库只包含 MCP server 源码；API 后端、解析与爬取引擎是私有的。
+- 版本更新快，以 README/官网为准。
+
+---
+
 ## 选型建议
 
 | 目标 | 优先选择 | 原因 |
 |------|----------|------|
 | 需求模糊，先想清楚要做什么 | Brainstorm | 提问/回放/设计文档，锁定 what & why |
 | 需求已清楚，要规格与变更管理 | OpenSpec | proposal/spec/design/tasks + archive |
+| 需要最新库文档/版本相关 API | Context7 | 把当前版本文档注入上下文，减少过时 API |
 | 接手陌生代码库/知识库 | Understand Anything | 知识图谱先看全局 |
 | 把方案/架构"画出来"给人看 | Archify | 可交互 HTML，适合评审与分享 |
 | 事故复盘 | Archify | Timeline/Sequence/Waterfall 组合 |
@@ -323,9 +402,10 @@ Superpowers 按平台安装，常见方式：
 2. **Brainstorm**：把 what/why 问清楚，产出设计文档；
 3. **OpenSpec**：把设计拆成 proposal / specs / design / tasks；
 4. **Archify**：把关键架构/流程画出来，用于评审或分享；
-5. **实现**：进入编码；Superpowers 可继续接 writing-plans / TDD，OpenSpec 用 `/opsx:apply` 按 tasks 推进。
+5. **Context7**：实现时拉当前版本的库/API 文档，避免旧 API 与幻觉；
+6. **实现**：进入编码；Superpowers 可继续接 writing-plans / TDD，OpenSpec 用 `/opsx:apply` 按 tasks 推进。
 
-这套链路覆盖"理解现状 → 想清楚 → 写规格 → 画出来 → 实现"，四个工具各管一段，不互相替代。
+这套链路覆盖"理解现状 → 想清楚 → 写规格 → 画出来 → 查当前文档 → 实现"，五个工具各管一段，不互相替代。
 
 ## 维护约定
 
